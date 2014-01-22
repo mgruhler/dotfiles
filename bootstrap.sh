@@ -10,8 +10,13 @@ link_files () {
 
 	    if [ -f $dest ] || [ -d $dest ]
 	    then
-	    	printf "Backup of existing file \n"
-	    	mv $dest $dest\.backup
+		if [ -f $dest\.backup ]
+		then
+		    printf "Backup already existing \n"
+		else
+		    printf "Backup of existing file \n"
+		    mv $dest $dest\.backup
+		fi
 	    fi
 	    ln -s $source $dest
       printf "Installed $dest \n"
