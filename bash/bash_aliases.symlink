@@ -1,0 +1,33 @@
+# system aliases
+alias cd..='cd ..'
+alias ..='cd ..'
+alias ...='cd ..'
+alias ls='ls --color=auto'
+alias l='ls -CF'
+alias ll='ls -alF --time-style=long-iso'
+
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+
+# ROS sources
+alias fuerte='source ~/dotfiles/ros/ros_fuerte.sh'
+alias groovy='source ~/dotfiles/ros/ros_groovy.sh'
+alias miror='source ~/dotfiles/ros/ros_miror.sh'
+
+# Robot connection
+alias r31='ssh -X mig@raw3-1-pc1'
+alias r33='ssh -X mig@raw3-3-pc1'
+alias c33='ssh -X mig@cob3-3-pc1'
+alias c36='ssh -X mig@cob3-6-pc1'
+
+# ROS_MASTER_URI
+alias er31='export ROS_MASTER_URI=http://raw3-1-pc1:11311'
+alias er33='export ROS_MASTER_URI=http://raw3-3-pc1:11311'
+alias ec33='export ROS_MASTER_URI=http://cob3-3-pc1:11311'
+alias ec36='export ROS_MASTER_URI=http://cob3-6-pc1:11311'

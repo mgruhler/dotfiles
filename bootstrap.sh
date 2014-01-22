@@ -4,7 +4,7 @@
 
 
 link_files () {
-	for source in `find ~/.dotfiles -maxdepth 2 -name \*.symlink`
+	for source in `find ~/dotfiles -maxdepth 2 -name \*.symlink`
   	do
   		dest="$HOME/.`basename \"${source%.*}\"`"
 
