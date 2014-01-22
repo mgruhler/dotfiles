@@ -41,6 +41,6 @@ function parse_git_dirty {
   [[ $(git status -uno 2> /dev/null | tail -n1 | cut -c1-17) != "nothing to commit" ]] && echo "*"
 }
 function parse_git_branch {
-git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\[\1$(parse_git_dirty)$(need_push)\]/"
+git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(parse_git_dirty)$(need_push))/"
 }
 export PS1='\[${SOLAR_ORANGE}\]\u\[${SOLAR_WHITE}\]@\[${SOLAR_YELLOW}\]\h \[${BOLD}${SOLAR_GREEN}\]\w\[${RESET}${SOLAR_BLUE}\]$(parse_git_branch)\[${RESET}\]$ '
