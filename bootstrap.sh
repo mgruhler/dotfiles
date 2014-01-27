@@ -4,26 +4,31 @@
 
 
 link_files () {
-	for source in `find ~/dotfiles -maxdepth 2 -name \*.symlink`
-  	do
-  		dest="$HOME/.`basename \"${source%.*}\"`"
+    for source in `find ~/dotfiles -maxdepth 2 -name \*.symlink`
+    do
+        dest="$HOME/.`basename \"${source%.*}\"`"
 
-	    if [ -f $dest ] || [ -d $dest ]
-	    then
-		if [ -f $dest\.backup ]
-		then
-		    printf "Backup already existing \n"
-		else
-		    printf "Backup of existing file \n"
-		    mv $dest $dest\.backup
-		fi
-	    fi
-	    ln -s $source $dest
-      printf "Installed $dest \n"
-	done
+        if [ -f $dest ] || [ -d $dest ]
+        then
+
+            if [ -f $dest\.backup ]
+            then
+              printf "Backup already existing \n"
+            else
+              printf "Backup of existing file \n"
+              mv $dest $dest\.backup
+              ln -s $source $dest
+              printf "Installed $dest \n"
+            fi
+
+        fi
+
+    done
 }
 
 link_files
+
+./git/gitconfig_setup.bash
 
 echo "raw3-1" > ~/.current_robot
 echo "empty" > ~/.current_robot_env

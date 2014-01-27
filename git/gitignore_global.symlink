@@ -1,0 +1,12 @@
+#ignore folders of executables and builds
+
+bin/
+build/
+lib/
+srv_gen/
+msg_gen/
+
+#ignore temporary and swap files
+*.swp
+\#*\#
+
