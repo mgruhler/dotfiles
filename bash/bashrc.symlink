@@ -58,3 +58,8 @@ source ~/dotfiles/ros/ros_common.sh
 function sourcethis() {
 	source ~/dotfiles/ros/sourcews.sh
 }
+
+### catkin_make convenience improvement
+function catmake() {
+	source ~/dotfiles/ros/catmake.sh
+}
