@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source /opt/ros/groovy/setup.bash
+source ~/git/miror_catkin/devel/setup.bash 
 
 ### MIROR
 export MIROR_ROOT=~/git/miror_rosbuild
