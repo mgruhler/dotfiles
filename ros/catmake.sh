@@ -14,7 +14,10 @@ NOTFOUND=true
 while test $CWD != $HOME && $NOTFOUND ; do
 	if [ -f "$CWD/devel/setup.bash" ] ;
 	then
-		catkin_make
+    echo " "
+    echo "Invorking catkin make in $CWD"
+    echo " "
+    catkin_make
 		NOTFOUND=false
 	else	
 		pushd .. > /dev/null
@@ -22,7 +25,6 @@ while test $CWD != $HOME && $NOTFOUND ; do
 	fi
 done
 
-# if we didn't find a catkin workspace source bashrc, just in case
 if $NOTFOUND;
 then
 	echo " "
