@@ -17,11 +17,6 @@ alias bsr="source ~/.bashrc"
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 
-# ROS sources
-alias fuerte='source ~/dotfiles/ros/ros_fuerte.sh'
-alias groovy='source ~/dotfiles/ros/ros_groovy.sh'
-alias miror='source ~/dotfiles/ros/ros_miror.sh'
-
 # Robot connection
 alias r31='ssh -X mig@raw3-1-pc1'
 alias r33='ssh -X mig@raw3-3-pc1'
