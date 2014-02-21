@@ -1,0 +1,10 @@
+" general vim options
+" apply to all types of files
+set expandtab
+set tabstop=2
+set shiftwidth=2
+
+" enable plugins for specific filetypes
+" they are stored in .vim/ftplugin/$LANGUAGE.vim
+filetype plugin on
+filetype plugin indent on
