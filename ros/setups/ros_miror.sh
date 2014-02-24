@@ -1,9 +1,9 @@
 #!/bin/sh
 
-source ~/git/miror_catkin/devel/setup.bash 
+source ~/git/miror_groovy/wet/devel/setup.bash 
 
 ### MIROR
-export MIROR_ROOT=~/git/miror_rosbuild
+export MIROR_ROOT=~/git/miror_groovy/dry
 
 ### ROS
 export ROS_WORKSPACE=${MIROR_ROOT}
