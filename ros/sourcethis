@@ -13,10 +13,15 @@ echo " "
 
 # search recursively through folders until we run into the homedirectory
 while test $CWD != $HOME && $NOTFOUND ; do
-	if [ -f "$CWD/devel/setup.bash" ] ;
+	if [ -f "$CWD/wet/devel/setup.bash" ] ;
 	then
-		source $CWD/devel/setup.bash
-		echo "sourced $CWD/devel/setup.bash"
+    if [ -f "$CWD/setup.bash" ] ;
+    then
+      source $CWD/setup.bash
+    elif
+  		source $CWD/wet/devel/setup.bash
+    fi
+		echo "sourced workspace in $CWD"
 		NOTFOUND=false
 	else	
 		pushd .. > /dev/null
@@ -33,5 +38,6 @@ fi
 
 echo " "
 
-# get back old workind directory
+# get back old working directory and clear directory stack
 pushd $DIR > /dev/null
+dirs -c > /dev/null

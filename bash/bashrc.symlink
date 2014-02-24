@@ -51,15 +51,13 @@ fi
 source ~/dotfiles/bash/git-completion.bash
 source ~/dotfiles/bash/git-prompt.bash
 
-### ROS setup ###
+### ROS setup 
 source ~/dotfiles/ros/ros_common.sh
 
 ### sourcethis function which enables the sourcethis command
 function sourcethis() {
-	source ~/dotfiles/ros/sourcews.sh
+	source ~/dotfiles/ros/sourcethis
 }
 
-### catkin_make convenience improvement
-function catmake() {
-	source ~/dotfiles/ros/catmake.sh
-}
+### add bin folder to path 
+export PATH=$PATH:~/dotfiles/bin

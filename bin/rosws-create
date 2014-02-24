@@ -1,0 +1,56 @@
+#!/bin/bash
+
+###
+### Script for creating a workspace with chained catkin and rosbuild folders 
+###
+if [ $# != '2' ] && [ $2 != "hydro" -a $2 != 'groovy' ] ;
+then
+  echo "Usage: rosws-create FOLDER DISTRO"
+  echo "Currently supported are \"hydro\" and \"groovy\""
+  echo "The workspace folder will be created in ~/git"
+  exit 1
+fi
+
+FOLDER=$1
+DISTRO=$2
+WSROOT=~/git
+
+WS=$WSROOT/$FOLDER
+
+# test if workspace already exists
+if [ -d "$WS" ] ;
+then
+  echo "WS Folder already exists."
+  exit 1
+fi
+
+# source respective ROS distro
+source /opt/ros/$DISTRO/setup.bash
+echo "sourced /opt/ros/$DISTRO/setup.bash"
+
+# create workspace layout
+mkdir -p $WS
+pushd $WS
+mkdir dry
+mkdir wet
+pushd wet
+mkdir src
+pushd src
+catkin_init_workspace
+popd
+catkin_make
+popd
+touch setup.bash
+echo "source $WS/wet/devel/setup.bash" >> setup.bash
+echo "export ROS_PACKAGE_PATH=$WS/wet/src:$WS/dry:\$ROS_PACKAGE_PATH" >> setup.bash
+
+echo " "
+echo "created workspace folder $WS"
+echo " "
+
+# get back old working directory and empty directory stack
+pushd $DIR > /dev/null
+dirs -c > /dev/null
+
+exit 0
+
