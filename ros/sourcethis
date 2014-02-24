@@ -13,27 +13,27 @@ echo " "
 
 # search recursively through folders until we run into the homedirectory
 while test $CWD != $HOME && $NOTFOUND ; do
-	if [ -f "$CWD/wet/devel/setup.bash" ] ;
-	then
+  if [ -f "$CWD/wet/devel/setup.bash" ] ;
+  then
     if [ -f "$CWD/setup.bash" ] ;
     then
       source $CWD/setup.bash
-    elif
-  		source $CWD/wet/devel/setup.bash
+    else
+      source $CWD/wet/devel/setup.bash
     fi
-		echo "sourced workspace in $CWD"
-		NOTFOUND=false
-	else	
-		pushd .. > /dev/null
-		CWD=$(pwd)
-	fi
+    echo "sourced workspace in $CWD"
+    NOTFOUND=false
+  else  
+    pushd .. > /dev/null
+    CWD=$(pwd)
+  fi
 done
 
 # if we didn't find a catkin workspace source bashrc, just in case
 if $NOTFOUND;
 then
-	echo "Not in catkin workspace, sourcing .bashrc"
-	source ~/.bashrc
+  echo "Not in catkin workspace, sourcing .bashrc"
+  source ~/.bashrc
 fi
 
 echo " "
