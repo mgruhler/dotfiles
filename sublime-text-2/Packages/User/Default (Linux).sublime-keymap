@@ -1,0 +1,4 @@
+[
+	{ "keys": ["alt+left"], "command": "focus_group", "args": { "group": 0 } },
+	{ "keys": ["alt+right"], "command": "focus_group", "args": { "group": 1 } }
+]

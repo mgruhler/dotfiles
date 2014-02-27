@@ -9,7 +9,7 @@ msg_gen/
 #ignore temporary and swap files
 *.swp
 \#*\#
-.cache
+*.cache
 
 #ignore executables
 *.pyc
