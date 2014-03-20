@@ -3,7 +3,7 @@
 ###
 ### Script for creating a workspace with chained catkin and rosbuild folders 
 ###
-if [ $# != '2' ] && [ $2 != "hydro" -a $2 != 'groovy' ] ;
+if [ $# -ne '2' ] || [ $2 != "hydro" -a $2 != 'groovy' ] ;
 then
   echo "Usage: rosws-create FOLDER DISTRO"
   echo "Currently supported are \"hydro\" and \"groovy\""
