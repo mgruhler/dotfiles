@@ -289,7 +289,7 @@
     // Closing a window with an associated project will also close the window
     // without prompting, preserving unsaved changes in the workspace file
     // alongside the project.
-    "hot_exit": true,
+    "hot_exit": false,
 
     // remember_open_files makes the application start up with the last set of
     // open files. Changing this to false will have no effect if hot_exit is
