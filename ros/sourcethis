@@ -13,13 +13,16 @@ echo " "
 
 # search recursively through folders until we run into the homedirectory
 while test $CWD != $HOME && $NOTFOUND ; do
-  if [ -f "$CWD/wet/devel/setup.bash" ] ;
+  if [ -f "$CWD/wet/devel/setup.bash" -o -f "$CWD/devel/setup.bash" ] ;
   then
-    if [ -f "$CWD/setup.bash" ] ;
+    if [ -f "$CWD/../setup.bash" ] ;
+    then
+      source $CWD/../setup.bash
+    elif [ -f "$CWD/setup.bash" ] ;
     then
       source $CWD/setup.bash
     else
-      source $CWD/wet/devel/setup.bash
+      source $CWD/devel/setup.bash
     fi
     echo "sourced workspace in $CWD"
     NOTFOUND=false

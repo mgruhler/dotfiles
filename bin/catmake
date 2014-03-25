@@ -1,6 +1,6 @@
 #!/bin/bash
 function upsearch () {
-    test / == "$PWD" && return || test -e "src" && test -e "src/CMakeLists.txt" && grep "catkin_workspace()" src/CMakeLists.txt &&echo "found: " "$PWD" && return || cd .. && upsearch "$1"
+test / == "$PWD" && return || test -e "src" && ((test -e "src/CMakeLists.txt" && grep "catkin_workspace()" src/CMakeLists.txt) || (test -e "src/toplevel.cmake" && grep "catkin_workspace()" src/toplevel.cmake)) && echo "found: " "$PWD" && return || cd .. && upsearch "$1"
   }
 
   upsearch

@@ -3,24 +3,180 @@
 ###
 ### Script for creating a workspace with chained catkin and rosbuild folders 
 ###
-if [ $# -ne '2' ] || [ $2 != "hydro" -a $2 != 'groovy' ] ;
+
+### echo usage
+echo_usage() {
+  echo "Usage: rosws-create [options] FOLDER ROSDISTRO"
+  echo ""
+  echo "Sets up a catkin workspace and configures it depending on given options."
+  echo "Currently supported ros distros are \"hydro\" and \"groovy\"."
+  echo "For groovy, a \"wet\" and a \"dry\" folder are created in the workspace for"
+  echo "catkin and rosbuild, respectively, and a setup.bash is created in the same"
+  echo "location that automatically sources the catkin workspace and adjusts the"
+  echo "ROS_PACKAGE_PATH to contain the rosbuild workspace as well."
+  echo "By default, the workspace folder is created where you call the command."
+  echo ""
+  echo "optional arguments:"
+  echo "-h, -- help           Show this help message and exit"
+  echo "-l, --lint            Configure the ws to include lint checks of the CMakeLists.txt."
+  echo "                      You need to have catkin_lint installted to do so."
+  echo "-p <PATH>, --path=<PATH>"
+  echo "                      Create ws in this location."
+  echo "-o <OVERLAY>, --overlay=<OVERLAY>"
+  echo "                      Overlay the catkin workspace over the specified workspaces. "
+  echo ""
+}
+
+### create a workspace with lint instead of calling catkin_init_workspace
+catkin_init_workspace_lint() {
+  ln -s /opt/ros/$DISTRO/share/catkin/cmake/toplevel.cmake toplevel.cmake
+  touch CMakeLists.txt
+  echo "cmake_minimum_required(VERSION 2.8.3)" >> CMakeLists.txt
+  echo "execute_process(COMMAND catkin_lint \"\${CMAKE_SOURCE_DIR}\" RESULT_VARIABLE lint_result)"  >> CMakeLists.txt
+  echo "if(NOT \${lint_result} EQUAL 0)" >> CMakeLists.txt
+  echo "    message(FATAL_ERROR \"catkin_lint failed\")" >> CMakeLists.txt
+  echo "endif()" >> CMakeLists.txt
+  echo "include(toplevel.cmake)" >> CMakeLists.txt
+}
+
+### Function creating a groovy ws
+create_groovy_ws() {
+  mkdir -p $WS
+  pushd $WS > /dev/null
+  mkdir dry && mkdir wet
+  pushd wet > /dev/null
+  mkdir src
+  pushd src > /dev/null
+  if [ "$LINT" == true ] ;
+  then
+    catkin_init_workspace_lint
+  else
+    catkin_init_workspace
+  fi
+  popd > /dev/null
+  catkin_make
+  popd > /dev/null
+  touch setup.bash
+  echo "source $WS/wet/devel/setup.bash" >> setup.bash
+  echo "export ROS_PACKAGE_PATH=$WS/wet/src:$WS/dry:\$ROS_PACKAGE_PATH" >> setup.bash
+}
+
+
+### Function creating a catkin ws
+create_catkin_ws() {
+  mkdir -p $WS/src
+  pushd $WS > /dev/null
+  pushd src > /dev/null
+  if [ "$LINT" == true ] ;
+  then
+    catkin_init_workspace_lint
+  else
+    catkin_init_workspace
+  fi
+  popd > /dev/null
+  catkin_make
+}
+
+
+
+### Main
+LINT=false
+WSROOT=$(pwd)
+
+# read in arguments
+optspec=":hlo:p:-:"
+while getopts "$optspec" optchar; do
+  case "${optchar}" in
+    -)
+      case "${OPTARG}" in
+        help)
+          echo_usage
+          exit 2
+          ;;
+        lint)
+          LINT=true
+          ;;
+        overlay=*)
+          val=${OPTARG#*=}
+          OVERLAY=$val
+          ;;
+        path=*)
+          val=${OPTARG#*=}
+          WSROOT=$val
+          ;;
+        *)
+          echo "Unknown option --${OPTARG}" >&2
+          echo_usage
+          exit 1
+          ;;
+      esac;;
+    h)
+      echo_usage
+      exit 2
+      ;;
+    l)
+      LINT=true
+      ;;
+    o)
+      OVERLAY=$OPTARG
+      ;;
+    p)
+      WSROOT=$OPTARG
+      ;;
+    *)
+      if [ "$OPTERR" != 1 ] || [ "${optspec:0:1}" = ":" ]; then
+        echo "Non-option argument: '-${OPTARG}'" >&2
+        echo_usage
+        exit 1
+      fi
+      ;;
+  esac
+done
+
+FOLDER=${@:$OPTIND:1}
+DISTRO=${@:$OPTIND+1:1}
+
+#check if positional parameters are given and distro is correct
+if [ "$FOLDER" == "" ] || [ "$DISTRO" == "" ] ;
 then
-  echo "Usage: rosws-create FOLDER DISTRO"
-  echo "Currently supported are \"hydro\" and \"groovy\""
-  echo "The workspace folder will be created in ~/git"
+  echo_usage
   exit 1
 fi
 
-FOLDER=$1
-DISTRO=$2
-WSROOT=~/git
+if [ ! -f "/opt/ros/$DISTRO/setup.bash" ] ;
+then
+  echo "Your specified distro $DISTRO is not supported or not installed!"
+  echo ""
+  echo_usage
+  exit 1
+fi
 
+# check other parameters
+if [ "$LINT" == true ] ;
+then
+  if [ -z $(command -v catkin_lint) ] ;
+  then
+    echo "It seems you do not have catkin_lint installed. This is required!"
+    echo "Check https://github.com/fkie/catkin_lint#installation for installation instructions."
+    exit 1
+  fi
+fi
+
+if [ ! -d $WSROOT ] ;
+then
+  echo "The path \"$WSROOT\" you want to create the workspace in does not exist! Aborting!"
+  exit 1
+fi
+
+pushd $WSROOT > /dev/null
+WSROOT=$(pwd)
+popd > /dev/null
 WS=$WSROOT/$FOLDER
 
 # test if workspace already exists
 if [ -d "$WS" ] ;
 then
-  echo "WS Folder already exists."
+  echo "WS Folder already exists." >&2
   exit 1
 fi
 
@@ -28,21 +184,27 @@ fi
 source /opt/ros/$DISTRO/setup.bash
 echo "sourced /opt/ros/$DISTRO/setup.bash"
 
+if [ -n "$OVERLAY" ]  ;
+then
+  if [ ! -e $OVERLAY/devel/setup.bash ] && [ ! -e $OVERLAY/wet/devel/setup.bash ] ;
+  then
+    echo "The workspace \"$OVERLAY\" you want to overlay does not exist! Aborting!"
+    exit 1
+  elif [ -e $OVERLAY/wet/devel/setup.bash ]
+  then
+    source $OVERLAY/wet/devel/setup.bash
+  else
+    source $OVERLAY/devel/setup.bash
+  fi
+fi
+
 # create workspace layout
-mkdir -p $WS
-pushd $WS
-mkdir dry
-mkdir wet
-pushd wet
-mkdir src
-pushd src
-catkin_init_workspace
-popd
-catkin_make
-popd
-touch setup.bash
-echo "source $WS/wet/devel/setup.bash" >> setup.bash
-echo "export ROS_PACKAGE_PATH=$WS/wet/src:$WS/dry:\$ROS_PACKAGE_PATH" >> setup.bash
+if [ $DISTRO == 'groovy' ] 
+then
+  create_groovy_ws
+else
+  create_catkin_ws
+fi
 
 echo " "
 echo "created workspace folder $WS"
