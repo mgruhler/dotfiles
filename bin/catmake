@@ -3,5 +3,96 @@ function upsearch () {
 test / == "$PWD" && return || test -e "src" && ((test -e "src/CMakeLists.txt" && grep "catkin_workspace()" src/CMakeLists.txt) || (test -e "src/toplevel.cmake" && grep "catkin_workspace()" src/toplevel.cmake)) && echo "found: " "$PWD" && return || cd .. && upsearch "$1"
   }
 
-  upsearch
+function echo_usage() {
+  echo "Usage: catmake [options]"
+  echo ""
+  echo "Invokes catkin_make in the root workspace."
+  echo "By default it uses the default CMAKE variables provided."
+  echo ""
+  echo "optional arguments:"
+  echo "-h           Show this help message and exit"
+  echo "-c           Clears the workspace prior to build."
+  echo "-d           Builds in Debug mode. You might need to clear the workspace before so it takes effect."
+  echo "-r           Builds in Release mode. You might need to clear the workspace before so it takes effect."
+  echo "-v           Turn on verbose output."
+  echo ""
+  echo "Note: -d and -r are mutually exclusive."
+  echo ""
+}
+
+
+# read in arguments
+CLEARWS=false
+BUILDARGS=""
+DEBUG=false
+RELEASE=false
+WARN=false
+optspec=":hcdrv"
+while getopts "$optspec" optchar; do
+  case "${optchar}" in
+    h)
+      echo_usage
+      exit 2
+      ;;
+    c)
+      CLEARWS=true
+      ;;
+    d)
+      DEBUG=true
+      BUILDARGS="$BUILDARGS -DCMAKE_BUILD_TYPE=Debug"
+      ;;
+    r)
+      RELEASE=true
+      BUILDARGS="$BUILDARGS -DCMAKE_BUILD_TYPE=Release"
+      ;;
+    v)
+      BUILDARGS="$BUILDARGS VERBOSE=1"
+      ;;
+    *)
+      if [ "$OPTERR" != 1 ] || [ "${optspec:0:1}" = ":" ]; then
+        echo "Non-option argument: '-${OPTARG}'" >&2
+        echo_usage
+        exit 1
+      fi
+      ;;
+  esac
+done
+
+if [ "$RELEASE" == true ] &&  [ "$DEBUG" == true ] ;
+then
+  echo "You specified both -d and -r. This is not valid."
+  echo_usage
+  exit 1
+fi
+
+upsearch
+if [ "$CLEARWS" == true ] ;
+then
+  if [ -d "build" ] ;
+  then
+    rm -r build
+  fi
+  if [ -d "devel" ] ;
+  then
+    rm -r devel
+  fi
+  if [ -d "install" ] ;
+  then
+    rm -r install
+  fi
+  if [ -d "build_isolated" ] ;
+  then
+    rm -r build_isolated
+  fi
+  if [ -d "devel_isolated" ] ;
+  then
+    rm -r devel_isolated
+  fi
+fi
+
+if [[ -z "$BUILDARGS" ]] ;
+then
   catkin_make
+else
+  catkin_make --force-cmake $BUILDARGS
+fi

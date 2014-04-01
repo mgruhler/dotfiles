@@ -5,7 +5,7 @@
 ###
 
 ### echo usage
-echo_usage() {
+function echo_usage() {
   echo "Usage: rosws-create [options] FOLDER ROSDISTRO"
   echo ""
   echo "Sets up a catkin workspace and configures it depending on given options."
@@ -28,7 +28,7 @@ echo_usage() {
 }
 
 ### create a workspace with lint instead of calling catkin_init_workspace
-catkin_init_workspace_lint() {
+function catkin_init_workspace_lint() {
   ln -s /opt/ros/$DISTRO/share/catkin/cmake/toplevel.cmake toplevel.cmake
   touch CMakeLists.txt
   echo "cmake_minimum_required(VERSION 2.8.3)" >> CMakeLists.txt
@@ -40,7 +40,7 @@ catkin_init_workspace_lint() {
 }
 
 ### Function creating a groovy ws
-create_groovy_ws() {
+function create_groovy_ws() {
   mkdir -p $WS
   pushd $WS > /dev/null
   mkdir dry && mkdir wet
@@ -63,7 +63,7 @@ create_groovy_ws() {
 
 
 ### Function creating a catkin ws
-create_catkin_ws() {
+function create_catkin_ws() {
   mkdir -p $WS/src
   pushd $WS > /dev/null
   pushd src > /dev/null
