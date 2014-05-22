@@ -18,13 +18,13 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 
 # Robot connection
-alias r31='ssh -X mig@raw3-1-pc1'
-alias r33='ssh -X mig@raw3-3-pc1'
-alias c33='ssh -X mig@cob3-3-pc1'
-alias c36='ssh -X mig@cob3-6-pc1'
+alias raw31='ssh -X mig@raw3-1-pc1'
+alias raw33='ssh -X mig@raw3-3-pc1'
+alias cob33='ssh -X mig@cob3-3-pc1'
+alias cob36='ssh -X mig@cob3-6-pc1'
 
 # ROS_MASTER_URI
-alias er31='export ROS_MASTER_URI=http://raw3-1-pc1:11311'
-alias er33='export ROS_MASTER_URI=http://raw3-3-pc1:11311'
-alias ec33='export ROS_MASTER_URI=http://cob3-3-pc1:11311'
-alias ec36='export ROS_MASTER_URI=http://cob3-6-pc1:11311'
+alias expraw31='export ROS_MASTER_URI=http://raw3-1-pc1:11311'
+alias expraw33='export ROS_MASTER_URI=http://raw3-3-pc1:11311'
+alias expcob33='export ROS_MASTER_URI=http://cob3-3-pc1:11311'
+alias expcob36='export ROS_MASTER_URI=http://cob3-6-pc1:11311'
