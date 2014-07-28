@@ -1,0 +1,46 @@
+#!/bin/bash
+
+###
+### Script for checking all packages for changes
+###
+
+# checking input parameters
+if [[ "$#" -ge 3 || "$#" -eq 0 ]]; then
+        echo "ERROR: Wrong number of parameters"
+        echo "Usage: git_status_all.sh <outputfile> [-u, -uno]"
+        exit 1
+else
+  output=$PWD/$1
+  if [[ "$2" == "-u" || "$2" == "-uno" ]]; then
+    untracked=$2
+  else
+    echo "ERROR: unknown command parameter"
+          echo "Usage: git_status_all.sh <outputfile> [-u, -uno]"
+  fi
+fi
+
+
+# get all repos 
+ls -l $PWD | grep '^d' | awk '{print $9}' > /tmp/repos_tmp.txt
+
+# check git status for repos
+echo "--- Check git status $untracked for all repos! ---" > $output
+echo "" >> $output
+
+while read line
+do
+    pushd $PWD/$line > /dev/null
+
+    echo "__ git status for repository: $line __" >> $output
+    git status $untracked >> $output
+    echo "" >> $output
+
+    popd > /dev/null
+done < /tmp/repos_tmp.txt
+
+# clean up tmp files
+rm /tmp/repos_tmp.txt
+
+cat $output
+
+exit

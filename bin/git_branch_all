@@ -1,0 +1,37 @@
+#!/bin/bash
+
+###
+### Script for checking the branches in all packages
+###
+
+# checking input parameters
+if [[ "$#" -ge 2 || "$#" -eq 0 ]]; then
+        echo "ERROR: Wrong number of parameters"
+        echo "Usage: git_branch_all.sh <outputfile>"
+        exit 1
+else
+        output=$PWD/$1
+fi
+
+# get all installed stacks
+ls -l /home/mig/git/care-o-bot | grep '^d' | cut -c45- > /tmp/stacks_tmp.txt
+
+# check git status for stacks
+echo "--- Check git branch for all stacks! ---" > $output
+echo "" >> $output
+
+while read line
+do
+    pushd /home/mig/git/care-o-bot/$line > /dev/null
+
+	  echo "__ git branch for stack: $line __" >> $output
+ 	  git branch >> $output
+  	echo "" >> $output
+
+    popd > /dev/null
+done < /tmp/stacks_tmp.txt
+
+# clean up tmp files
+rm /tmp/stacks_tmp.txt
+
+exit

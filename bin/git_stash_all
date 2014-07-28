@@ -1,0 +1,44 @@
+#!/bin/bash
+
+###
+### Script for checking all packages for stashes 
+###
+
+# checking input parameters
+if [[ "$#" -ge 3 || "$#" -eq 0 ]]; then
+        echo "ERROR: Wrong number of parameters"
+        echo "Usage: ./git_stash_all.sh <outputfile> [list,show]"
+        exit 1
+else
+        output=$PWD/$1
+	if [[ "$2" == "list" || "$2" == "show" ]]; then
+		command=$2
+	else
+		echo "ERROR: unknown command parameter"
+	        echo "Usage: git_stash_all.sh <outputfile> [list,show]"
+	fi
+fi
+
+
+# get all installed stacks
+ls -l /home/mig/git/care-o-bot | grep '^d' | cut -c45- > /tmp/stacks_tmp.txt
+
+# check git stash for stacks
+echo "--- Check git stash $command for all stacks! ---" > $output
+echo "" >> $output
+
+while read line
+do
+    pushd /home/mig/git/care-o-bot/$line > /dev/null
+
+	  echo "__ git stash for stack: $line __" >> $output
+ 	  git stash $command >> $output
+  	echo "" >> $output
+
+    popd > /dev/null
+done < /tmp/stacks_tmp.txt
+
+# clean up tmp files
+rm /tmp/stacks_tmp.txt
+
+exit
