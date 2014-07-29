@@ -10,7 +10,7 @@ if [[ "$#" -ge 3 || "$#" -eq 0 ]]; then
         echo "Usage: git_status_all.sh <outputfile> [-u, -uno]"
         exit 1
 else
-  output=$PWD/$1
+  fileout=$PWD/$1
   if [[ "$2" == "-u" || "$2" == "-uno" ]]; then
     untracked=$2
   else
@@ -23,6 +23,8 @@ fi
 # get all repos 
 ls -l $PWD | grep '^d' | awk '{print $9}' > /tmp/repos_tmp.txt
 
+output=/tmp/output
+
 # check git status for repos
 echo "--- Check git status $untracked for all repos! ---" > $output
 echo "" >> $output
@@ -32,7 +34,7 @@ do
     pushd $PWD/$line > /dev/null
 
     echo "__ git status for repository: $line __" >> $output
-    git status $untracked >> $output
+    git status -sb $untracked >> $output
     echo "" >> $output
 
     popd > /dev/null
@@ -40,7 +42,10 @@ done < /tmp/repos_tmp.txt
 
 # clean up tmp files
 rm /tmp/repos_tmp.txt
-
 cat $output
+
+cat $output > $fileout
+
+rm $output
 
 exit
