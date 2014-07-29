@@ -28,5 +28,3 @@ link_files () {
 
 link_files
 
-./git/gitconfig_setup.bash
-

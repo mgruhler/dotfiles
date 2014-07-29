@@ -1,0 +1,13 @@
+[user]
+	name = ipa-mig
+	email = Matthias.Gruhler@ipa.fraunhofer.de
+[core]
+	editor = vim
+	excludesfile = ~/.gitignore_global
+[merge]
+	tool = meld
+[diff]
+	tool = meld
+[alias]
+	st = status -sb
+	co = commit
