@@ -4,41 +4,90 @@
 ### Script for checking the branches in all packages
 ###
 
-# checking input parameters
-if [[ "$#" -ge 2 || "$#" -eq 0 ]]; then
-        echo "ERROR: Wrong number of parameters"
-        echo "Usage: git_branch_all.sh <outputfile>"
+### echo usage
+function echo_usage() {
+  echo "Usage: git-branch-all [options]"
+  echo ""
+  echo "Shows the branches of all repositories in the current folder."
+  echo "Calls \"git branch\" internally on all directories in the current folder."
+  echo ""
+  echo "optional arguments:"
+  echo "-h, --help           Show this help message and exit"
+  echo "--outputfile=<FILE>   File to pipe output in. "
+  echo ""
+}
+
+### Main
+# read in arguments
+optspec=":h-:"
+
+OUTPUT=""
+
+while getopts "$optspec" optchar; do
+  case "${optchar}" in
+    -)
+      case "${OPTARG}" in
+        help)
+          echo_usage
+          exit 2
+          ;;
+        outputfile=*)
+          val=${OPTARG#*=}
+          OUTPUT=$val
+          ;;
+        *)
+          echo "Unknown option --${OPTARG}" >&2
+          echo_usage
+          exit 1
+          ;;
+      esac;;
+    h)
+      echo_usage
+      exit 2
+      ;;
+    *)
+      if [ "$OPTERR" != 1 ] || [ "${optspec:0:1}" = ":" ]; then
+        echo "Non-option argument: '-${OPTARG}'" >&2
+        echo_usage
         exit 1
-else
-        fileout=$PWD/$1
-fi
+      fi
+      ;;
+  esac
+done
+
 
 # get all installed stacks
 ls -l $PWD | grep '^d' | awk '{print $9}' > /tmp/stacks_tmp.txt
 
-output=/tmp/output
+tmp=/tmp/output
 
 # check git status for stacks
-echo "--- Check git branch for all stacks! ---" > $output
-echo "" >> $output
+echo "--- Check git branch for all stacks! ---" > $tmp
+echo "" >> $tmp
 
 while read line
 do
     pushd $PWD/$line > /dev/null
 
-	  echo "__ git branch for stack: $line __" >> $output
- 	  git branch >> $output
-  	echo "" >> $output
+	  echo "__ git branch for stack: $line __" >> $tmp
+ 	  git branch >> $tmp
+  	echo "" >> $tmp
 
     popd > /dev/null
 done < /tmp/stacks_tmp.txt
 
 # clean up tmp files
 rm /tmp/stacks_tmp.txt
-cat $output
 
-cat $output > $fileout
+if [ "$OUTPUT" == "" ]
+  then
+    cat $tmp    
+  else
+    cat $tmp
+    touch $OUTPUT
+    cat $tmp > $OUTPUT
+fi
 
-rm $output
+rm $tmp
 
 exit
