@@ -8,6 +8,8 @@
 	tool = meld
 [diff]
 	tool = meld
+[color]
+	ui = true
 [alias]
 	st = status -sb
 	co = commit
