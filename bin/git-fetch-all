@@ -1,0 +1,92 @@
+#!/bin/bash
+
+###
+### Script for checking all packages for changes
+###
+
+### echo usage
+function echo_usage() {
+  echo "Usage: git-fetch-all [options]"
+  echo ""
+  echo "Fetches of all repositories in the current folder."
+  echo "Calls \"git fetch --all -p\" internally on all directories in the current folder."
+  echo ""
+  echo "optional arguments:"
+  echo "-h, --help           Show this help message and exit"
+  echo "--outputfile=<FILE>   File to pipe output in. "
+  echo ""
+}
+
+### Main
+# read in arguments
+optspec=":h-:"
+
+OUTPUT=""
+
+while getopts "$optspec" optchar; do
+  case "${optchar}" in
+    -)
+      case "${OPTARG}" in
+        help)
+          echo_usage
+          exit 2
+          ;;
+        outputfile=*)
+          val=${OPTARG#*=}
+          OUTPUT=$val
+          ;;
+        *)
+          echo "Unknown option --${OPTARG}" >&2
+          echo_usage
+          exit 1
+          ;;
+      esac;;
+    h)
+      echo_usage
+      exit 2
+      ;;
+    *)
+      if [ "$OPTERR" != 1 ] || [ "${optspec:0:1}" = ":" ]; then
+        echo "Non-option argument: '-${OPTARG}'" >&2
+        echo_usage
+        exit 1
+      fi
+      ;;
+  esac
+done
+
+# get all repos 
+ls -l $PWD | grep '^d' | awk '{print $9}' > /tmp/repos_tmp.txt
+
+tmp=/tmp/output
+
+# check git status for repos
+echo "--- Fetching all repos! ---" > $tmp
+echo "" >> $tmp
+
+while read line
+do
+    pushd $PWD/$line > /dev/null
+
+    echo "__ git fetch for repository: $line __" >> $tmp
+    git fetch --all -p >> $tmp
+    echo "" >> $tmp
+
+    popd > /dev/null
+done < /tmp/repos_tmp.txt
+
+# clean up tmp files
+rm /tmp/repos_tmp.txt
+
+if [ "$OUTPUT" == "" ]
+  then
+    cat $tmp    
+  else
+    cat $tmp
+    touch $OUTPUT
+    cat $tmp > $OUTPUT
+fi
+
+rm $tmp
+
+exit
