@@ -77,16 +77,16 @@ ls -l $PWD | grep '^d' | awk '{print $9}' > /tmp/stacks_tmp.txt
 tmp=/tmp/output
 
 # check git stash for stacks
-echo "--- Check git stash $COMMAND for all stacks! ---" > $tmp
-echo "" >> $tmp
+echo "--- Check git stash $COMMAND for all stacks! ---" | tee $tmp
+echo "" | tee -a $tmp
 
 while read line
 do
     pushd $PWD/$line > /dev/null
 
-	  echo "__ git stash for stack: $line __" >> $tmp
- 	  git stash $COMMAND >> $tmp
-  	echo "" >> $tmp
+	  echo "__ git stash for stack: $line __" | tee -a $tmp
+ 	  git stash $COMMAND | tee -a $tmp
+  	echo "" | tee -a $tmp
 
     popd > /dev/null
 done < /tmp/stacks_tmp.txt
@@ -96,9 +96,8 @@ rm /tmp/stacks_tmp.txt
 
 if [ "$OUTPUT" == "" ]
   then
-    cat $tmp    
+    echo "Done."
   else
-    cat $tmp
     touch $OUTPUT
     cat $tmp > $OUTPUT
 fi

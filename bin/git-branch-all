@@ -62,16 +62,16 @@ ls -l $PWD | grep '^d' | awk '{print $9}' > /tmp/stacks_tmp.txt
 tmp=/tmp/output
 
 # check git status for stacks
-echo "--- Check git branch for all stacks! ---" > $tmp
-echo "" >> $tmp
+echo "--- Check git branch for all stacks! ---" | tee $tmp
+echo "" | tee -a $tmp
 
 while read line
 do
     pushd $PWD/$line > /dev/null
 
-	  echo "__ git branch for stack: $line __" >> $tmp
- 	  git branch >> $tmp
-  	echo "" >> $tmp
+	  echo "__ git branch for stack: $line __" | tee -a $tmp
+ 	  git branch | tee -a $tmp
+  	echo "" | tee -a $tmp
 
     popd > /dev/null
 done < /tmp/stacks_tmp.txt
@@ -81,9 +81,8 @@ rm /tmp/stacks_tmp.txt
 
 if [ "$OUTPUT" == "" ]
   then
-    cat $tmp    
+    echo "Done."
   else
-    cat $tmp
     touch $OUTPUT
     cat $tmp > $OUTPUT
 fi

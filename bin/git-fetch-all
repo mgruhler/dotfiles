@@ -61,16 +61,16 @@ ls -l $PWD | grep '^d' | awk '{print $9}' > /tmp/repos_tmp.txt
 tmp=/tmp/output
 
 # check git status for repos
-echo "--- Fetching all repos! ---" > $tmp
-echo "" >> $tmp
+echo "--- Fetching all repos! ---" | tee $tmp
+echo "" | tee -a $tmp
 
 while read line
 do
     pushd $PWD/$line > /dev/null
 
-    echo "__ git fetch for repository: $line __" >> $tmp
-    git fetch --all -p >> $tmp
-    echo "" >> $tmp
+    echo "__ git fetch for repository: $line __" | tee -a $tmp
+    git fetch --all -p | tee -a $tmp
+    echo "" | tee -a $tmp
 
     popd > /dev/null
 done < /tmp/repos_tmp.txt
@@ -80,9 +80,8 @@ rm /tmp/repos_tmp.txt
 
 if [ "$OUTPUT" == "" ]
   then
-    cat $tmp    
+    echo "Done."
   else
-    cat $tmp
     touch $OUTPUT
     cat $tmp > $OUTPUT
 fi
