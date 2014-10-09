@@ -9,19 +9,24 @@ function echo_usage() {
   echo "Usage: git-fetch-all [options]"
   echo ""
   echo "Fetches of all repositories in the current folder."
-  echo "Calls \"git fetch --all -p\" internally on all directories in the current folder."
+  echo "Calls \"git fetch\" internally on all directories in the current folder."
   echo ""
   echo "optional arguments:"
-  echo "-h, --help           Show this help message and exit"
+  echo "-h, --help            Show this help message and exit."
+  echo "-o, --origin=<ORIGIN> Only fetch the specified origin. By default calls \"git fetch --all\"."
+  echo "-p, --purge           Call \"git fetch -p\"."
   echo "--outputfile=<FILE>   File to pipe output in. "
   echo ""
 }
 
 ### Main
 # read in arguments
-optspec=":h-:"
+optspec=":hpo:-:"
 
 OUTPUT=""
+
+ORIGIN="--all"
+PURGE=""
 
 while getopts "$optspec" optchar; do
   case "${optchar}" in
@@ -30,6 +35,13 @@ while getopts "$optspec" optchar; do
         help)
           echo_usage
           exit 2
+          ;;
+        origin=*)
+          val=${OPTARG#*=}
+          ORIGIN=$val
+          ;;
+        purge)
+          PURGE="-p"
           ;;
         outputfile=*)
           val=${OPTARG#*=}
@@ -44,6 +56,13 @@ while getopts "$optspec" optchar; do
     h)
       echo_usage
       exit 2
+      ;;
+    o)
+      val=${OPTARG#*=}
+      ORIGIN=$val
+      ;;
+    p)
+      PURGE="-p"
       ;;
     *)
       if [ "$OPTERR" != 1 ] || [ "${optspec:0:1}" = ":" ]; then
@@ -68,8 +87,9 @@ while read line
 do
     pushd $PWD/$line > /dev/null
 
-    echo "__ git fetch for repository: $line __" | tee -a $tmp
-    git fetch --all -p | tee -a $tmp
+    echo "__ git fetch $ORIGIN $PURGE for repository: $line __" | tee -a $tmp
+
+    git fetch $ORIGIN $PURGE | tee -a $tmp
     echo "" | tee -a $tmp
 
     popd > /dev/null
