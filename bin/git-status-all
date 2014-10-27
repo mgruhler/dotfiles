@@ -55,28 +55,44 @@ while getopts "$optspec" optchar; do
   esac
 done
 
-# get all repos 
-ls -l $PWD | grep '^d' | awk '{print $9}' > /tmp/repos_tmp.txt
-
 tmp=/tmp/output
+# check if we are already in a git repo
+if git rev-parse --git-dir > /dev/null 2>&1; then
 
-# check git status for repos
-echo "--- Check git status for all repos! ---" | tee $tmp
-echo "" | tee -a $tmp
+  REPO=$(git rev-parse --git-dir)
+  if [ $REPO == ".git" ]; then
+    REPO=$(pwd)
+  else
+    REPO=${REPO%/.git}
+  fi
+  echo "__ git status for repository: $REPO __" | tee -a $tmp
+  git status -sb | tee -a $tmp
+  echo "" | tee -a $tmp
 
-while read line
-do
-    pushd $PWD/$line > /dev/null
+else
+  
+  # get all repos 
+  ls -l $PWD | grep '^d' | awk '{print $9}' > /tmp/repos_tmp.txt
 
-    echo "__ git status for repository: $line __" | tee -a $tmp
-    git status -sb | tee -a $tmp
-    echo "" | tee -a $tmp
+  # check git status for repos
+  echo "--- Check git status for all repos! ---" | tee $tmp
+  echo "" | tee -a $tmp
 
-    popd > /dev/null
-done < /tmp/repos_tmp.txt
+  while read line
+  do
+      pushd $PWD/$line > /dev/null
 
-# clean up tmp files
-rm /tmp/repos_tmp.txt
+      echo "__ git status for repository: $line __" | tee -a $tmp
+      git status -sb | tee -a $tmp
+      echo "" | tee -a $tmp
+
+      popd > /dev/null
+  done < /tmp/repos_tmp.txt
+
+  # clean up tmp files
+  rm /tmp/repos_tmp.txt
+
+fi
 
 if [ "$OUTPUT" == "" ]
   then
