@@ -1,0 +1,59 @@
+#!/bin/bash
+
+###
+### Script for checking all packages for stashes 
+###
+
+### echo usage
+function echo_usage() {
+  echo "Usage: git-show-remote-all"
+  echo ""
+  echo "Shows all configured remotes of all repositories in the current folder."
+  echo "Calls \"git remote -v\" internally on all directories in the current folder."
+  echo ""
+}
+
+### Main
+# read in arguments
+tmp=/tmp/output
+# check if we are already in a git repo
+if git rev-parse --git-dir > /dev/null 2>&1; then
+
+  REPO=$(git rev-parse --git-dir)
+  if [ $REPO == ".git" ]; then
+    REPO=$(pwd)
+  else
+    REPO=${REPO%/.git}
+  fi
+  echo "__ git remote -v for repo: $REPO __" | tee -a $tmp
+  git remote -v | tee -a $tmp
+  echo "" | tee -a $tmp
+
+else
+
+  # get all installed repos
+  ls -l $PWD | grep '^d' | awk '{print $9}' > /tmp/repos_tmp.txt
+
+  # check git stash for repos
+  echo "--- Chall \"git remote -v\" for all repos! ---" | tee $tmp
+  echo "" | tee -a $tmp
+
+  while read line
+  do
+      pushd $PWD/$line > /dev/null
+
+      echo "__ git remote -v for repo: $line __" | tee -a $tmp
+      git remote -v | tee -a $tmp
+      echo "" | tee -a $tmp
+
+      popd > /dev/null
+  done < /tmp/repos_tmp.txt
+
+  # clean up tmp files
+  rm /tmp/repos_tmp.txt
+
+fi
+
+rm $tmp
+
+exit
