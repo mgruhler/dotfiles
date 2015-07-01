@@ -8,3 +8,5 @@ set shiftwidth=2
 " they are stored in .vim/ftplugin/$LANGUAGE.vim
 filetype plugin on
 filetype plugin indent on
+
+autocmd BufRead,BufNewFile *.launch setfiletype roslaunch
