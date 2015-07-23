@@ -60,7 +60,9 @@ while getopts "$optspec" optchar; do
   esac
 done
 
-tmp=/tmp/output
+DATE=$(date +%s%N)
+TMP=/tmp/git-all-$DATE
+REPOS=/tmp/repos-$DATE.txt
 
 # check if we are already in a git repo
 if git rev-parse --git-dir > /dev/null 2>&1; then
@@ -71,32 +73,32 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
   else
     REPO=${REPO%/.git}
   fi
-  echo "__ git branch $REMOTE for repo: $REPO __" | tee -a $tmp
-  git branch $REMOTE | tee -a $tmp
-  echo "" | tee -a $tmp
+  echo "__ git branch $REMOTE for repo: $REPO __" | tee -a $TMP
+  git branch $REMOTE | tee -a $TMP
+  echo "" | tee -a $TMP
 
 else
     
   # get all installed repos
-  ls -l $PWD | grep '^d' | awk '{print $9}' > /tmp/repos_tmp.txt
+  ls -l $PWD | grep '^d' | awk '{print $9}' > $REPOS
 
   # check git status for repos
-  echo "--- Check git branch for all repository! ---" | tee $tmp
-  echo "" | tee -a $tmp
+  echo "--- Check git branch for all repository! ---" | tee $TMP
+  echo "" | tee -a $TMP
 
   while read line
   do
       pushd $PWD/$line > /dev/null
 
-  	  echo "__ git branch $REMOTE for repo: $line __" | tee -a $tmp
-   	  git branch $REMOTE | tee -a $tmp
-    	echo "" | tee -a $tmp
+  	  echo "__ git branch $REMOTE for repo: $line __" | tee -a $TMP
+   	  git branch $REMOTE | tee -a $TMP
+    	echo "" | tee -a $TMP
 
       popd > /dev/null
-  done < /tmp/repos_tmp.txt
+  done < $REPOS
 
-  # clean up tmp files
-  rm /tmp/repos_tmp.txt
+  # clean up TMP files
+  rm $REPOS
 
 fi
 
@@ -105,9 +107,9 @@ if [ "$OUTPUT" == "" ]
     echo "Done."
   else
     touch $OUTPUT
-    cat $tmp > $OUTPUT
+    cat $TMP > $OUTPUT
 fi
 
-rm $tmp
+rm $TMP
 
 exit
