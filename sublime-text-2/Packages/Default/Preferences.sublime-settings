@@ -147,7 +147,7 @@
 
     // Set to "none" to turn off drawing white space, "selection" to draw only the
     // white space within the selection, and "all" to draw all white space
-    "draw_white_space": "selection",
+    "draw_white_space": "all",
 
     // Set to false to turn off the indentation guides.
     // The color and width of the indent guides may be customized by editing
