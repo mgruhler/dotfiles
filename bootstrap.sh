@@ -6,8 +6,8 @@
 link_files () {
     for source in `find ~/dotfiles -maxdepth 2 -name \*.symlink`
     do
+	printf "Bootstraping $source\n"
         dest="$HOME/.`basename \"${source%.*}\"`"
-
         if [ -f $dest ] || [ -d $dest ]
         then
 
@@ -17,11 +17,12 @@ link_files () {
             else
               printf "Backup of existing file \n"
               mv $dest $dest\.backup
-              ln -s $source $dest
-              printf "Installed $dest \n"
             fi
 
         fi
+
+        ln -s $source $dest
+        printf "Installed $dest \n"
 
     done
 }
