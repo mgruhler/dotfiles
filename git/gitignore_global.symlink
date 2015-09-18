@@ -10,6 +10,7 @@ msg_gen/
 *.swp
 \#*\#
 *.cache
+*~
 
 #ignore executables
 *.pyc
