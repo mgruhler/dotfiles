@@ -2,5 +2,6 @@
   { "keys": ["alt+left"], "command": "focus_group", "args": { "group": 0 } },
   { "keys": ["alt+right"], "command": "focus_group", "args": { "group": 1 } },
   { "keys": ["alt+f12"], "command": "reindent", "args": {"single_line": false} },
-  { "keys": ["ctrl+shift+f12"], "command": "expand_tabs", "args" : {"set_translate_tabs" : true} }
+  { "keys": ["ctrl+shift+f12"], "command": "expand_tabs", "args" : {"set_translate_tabs" : true} },
+  { "keys": ["ctrl+shift+f11"], "command": "unexpand_tabs", "args" : {"set_translate_tabs" : false} }
 ]
