@@ -21,6 +21,12 @@ function echo_usage() {
 }
 
 
+# check if some ROS environment is sourced
+if [ -z "$ROS_ROOT" ];
+then
+  echo "No ROS_ROOT set. Have you sourced a ROS environment?"
+  exit 1
+fi
 # read in arguments
 CLEARWS=false
 BUILDARGS=""
