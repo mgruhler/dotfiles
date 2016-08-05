@@ -15,6 +15,7 @@ function echo_usage() {
   echo "-d           Builds in Debug mode. You might need to clear the workspace before so it takes effect."
   echo "-r           Builds in Release mode. You might need to clear the workspace before so it takes effect."
   echo "-v           Turn on verbose output."
+  echo "-w           Compile with \"-Wall -Wextra\"."
   echo ""
   echo "Note: -d and -r are mutually exclusive."
   echo ""
