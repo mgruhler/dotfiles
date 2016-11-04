@@ -25,6 +25,7 @@ while test $CWD != $HOME && $NOTFOUND ; do
       source $CWD/devel/setup.bash
     fi
     echo "sourced workspace in $CWD"
+    echo "ROS_PACKAGE_PATH is: $ROS_PACKAGE_PATH"
     NOTFOUND=false
   else  
     pushd .. > /dev/null
