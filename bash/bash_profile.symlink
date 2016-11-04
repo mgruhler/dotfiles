@@ -1,3 +1,7 @@
 if [ -f ~/.bashrc ]; then
    source ~/.bashrc
 fi
+
+eval "$(hub alias -s)"
+
+

@@ -61,3 +61,9 @@ function sourcethis() {
 
 ### add bin folder to path 
 export PATH=$PATH:~/dotfiles/bin
+
+if [ -f ~/.hub.bash_completion ]; then
+   source ~/.hub.bash_completion
+fi
+
+
