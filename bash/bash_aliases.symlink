@@ -28,3 +28,7 @@ alias expraw31='export ROS_MASTER_URI=http://raw3-1-pc1:11311'
 alias expraw33='export ROS_MASTER_URI=http://raw3-3-pc1:11311'
 alias expcob33='export ROS_MASTER_URI=http://cob3-3-pc1:11311'
 alias expcob36='export ROS_MASTER_URI=http://cob3-6-pc1:11311'
+
+
+# schroot aliases
+alias indigo='schroot -c indigo_trusty'
