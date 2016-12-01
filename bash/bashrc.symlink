@@ -47,9 +47,11 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+### Custom prompt
+source ~/dotfiles/bash/prompt.bash
+
 ### GIT setup
 source ~/dotfiles/bash/git-completion.bash
-source ~/dotfiles/bash/git-prompt.bash
 
 ### ROS setup 
 source ~/dotfiles/ros/ros_common.sh
