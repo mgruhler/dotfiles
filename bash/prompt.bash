@@ -45,7 +45,7 @@ function parse_git_branch {
 git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(parse_git_dirty)$(need_push))/"
 }
 
-if [[ -z "${debian_chroot:+($debian_chroot)// }" ]]; then
+if [[ -z "${debian_chroot}" ]]; then
   export PS1='\[${SOLAR_ORANGE}\]\u\[${SOLAR_WHITE}\]@\[${SOLAR_YELLOW}\]\h \[${BOLD}${SOLAR_GREEN}\]\w\[${RESET}${SOLAR_BLUE}\]$(parse_git_branch)\[${RESET}\]$ '
 else
   export PS1='\[${BOLD}${SOLAR_GREEN}\]${debian_chroot:+($debian_chroot)\[${SOLAR_BLUE}\]|}\[${RESET}${SOLAR_MAGENTA}\]\u\[${SOLAR_WHITE}\]@\[${SOLAR_VIOLET}\]\h \[${BOLD}${SOLAR_GREEN}\]\w\[${RESET}${SOLAR_BLUE}\]$(parse_git_branch)\[${RESET}\]$ '
