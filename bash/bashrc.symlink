@@ -68,8 +68,10 @@ if [ -f ~/.hub.bash_completion ]; then
    source ~/.hub.bash_completion
 fi
 
-### check if we are in a chroot and export some ROS specific requirements
+### this is required for the QtCreator ROS Plugin
+source /opt/qt57/bin/qt57-env.sh
 
+### check if we are in a chroot and export some ROS specific requirements
 if [[ -z "${debian_chroot}" ]]; then
   # we are not in the chroot
   echo "Not in chroot" > /dev/null
