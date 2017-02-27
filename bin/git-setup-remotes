@@ -1,0 +1,95 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+
+import argparse
+from git import Repo
+import os
+
+# This dict stores the github username to remote name mapping
+# better: store in file in ~/.local/git-helpers/remote_mapping
+# also, option to load in remote_mapping from somewhere else
+# also, command to add mapping to file?
+REMOTES = {
+    "ipa320": "ipa320",
+    "ipa-bnm": "ipa-bnm",
+    "ipa-flg": "ipa-flg",
+    "ipa-jba": "ipa-jba",
+    "ipa-mig": "origin",
+    "ipa-srd": "ipa-srd"
+}
+
+
+def crawl_for_git_repo_paths(directory):
+    git_repos = []
+    # first, check if we are already in a git repo. If yes, only this is returned
+    inside, this_repo = in_repo(directory)
+    if inside:
+        git_repos.append(this_repo.working_tree_dir)
+    else:
+        # walk the directory tree within the folder where this file is executed
+        for root, directories, files in os.walk(directory):
+            # check if there is a subfolder called '.git'  in there.
+            # if this is the case, this is a git rep
+            for subdirectory in directories:
+                if '.git' in subdirectory:
+                    # don't go into any .git directories.
+                    directories.remove('.git')
+                    git_repos.append(os.path.abspath(root))
+    return git_repos
+
+
+def in_repo(directory):
+    try:
+        repo = Repo(directory, search_parent_directories=True)
+        return True, repo
+    except:
+        return False, None
+
+
+def setup_remotes(repo, https=False):
+    # get the repository url
+    current_remotes = {}
+    if not repo.remotes:
+        print ("EMPTY")
+        return
+
+    for remote in repo.remotes:
+        current_remotes[remote.name] = extract_url_from_remote(remote)
+        # TODO how to handle existing remotes? for now, only delete
+        # only delete the ones that should be adapted
+        repo.delete_remote(remote)
+
+    if "origin" in current_remotes:
+        (repo_name, user, provider) = current_remotes["origin"]
+    else:
+        (repo_name, user, provider) = current_remotes.itervalue().next()
+
+    for user in REMOTES:
+        if https:
+            url = "https://" + provider + "/" + user + "/" + repo_name
+        else:
+            url = "git@" + provider + ":" + user + "/" + repo_name
+        repo.create_remote(REMOTES[user], url)
+
+
+def extract_url_from_remote(remote):
+    full_url = remote.url
+    # replace : with /
+    full_url = full_url.replace(':', '/').replace('@', '/')
+    repo_name = full_url.rsplit('/')[-1]
+    user = full_url.rsplit('/')[-2]
+    provider = full_url.rsplit('/')[-3]
+    return (repo_name, user, provider)
+
+if __name__ == "__main__":
+    # TODO: depending on args, do for one or starting from a working dir
+    repo_paths = crawl_for_git_repo_paths(os.getcwd())
+    repos = []
+    for path in repo_paths:
+        repos.append(Repo(path))
+
+    for repo in repos:
+        setup_remotes(repo)
+
+    exit(0)
