@@ -13,6 +13,7 @@ import os
 REMOTES = {
     "ipa320": "ipa320",
     "ipa-bnm": "ipa-bnm",
+    "ipa-fke": "ipa-fke",
     "ipa-flg": "ipa-flg",
     "ipa-jba": "ipa-jba",
     "ipa-mig": "origin",
@@ -56,7 +57,7 @@ def setup_remotes(repo, https=False):
 
     for remote in repo.remotes:
         current_remotes[remote.name] = extract_url_from_remote(remote)
-        # TODO how to handle existing remotes? for now, only delete
+        # TODO how to handle existing remotes? for now,
         # only delete the ones that should be adapted
         repo.delete_remote(remote)
 
