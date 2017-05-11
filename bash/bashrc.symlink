@@ -64,9 +64,6 @@ function sourcethis() {
 ### add bin folder to path 
 export PATH=$PATH:~/dotfiles/bin
 
-### this is required for the QtCreator ROS Plugin
-source /opt/qt57/bin/qt57-env.sh
-
 ### check if we are in a chroot and export some ROS specific requirements
 if [[ -z "${debian_chroot}" ]]; then
   # we are not in the chroot

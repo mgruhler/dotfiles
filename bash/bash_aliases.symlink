@@ -29,6 +29,11 @@ alias expraw33='export ROS_MASTER_URI=http://raw3-3-pc1:11311'
 alias expcob33='export ROS_MASTER_URI=http://cob3-3-pc1:11311'
 alias expcob36='export ROS_MASTER_URI=http://cob3-6-pc1:11311'
 
-
 # schroot aliases
 alias indigo='schroot -c indigo_trusty'
+
+# industrial_ci local tests
+alias run_ci='/home/mig/git/industrial_ci/industrial_ci/scripts/run_ci'
+
+# start qt creator with specific envs without messing up ROS
+alias qtc='source /opt/qt57/bin/qt57-env.sh && qtcreator'
