@@ -33,7 +33,11 @@ alias expcob36='export ROS_MASTER_URI=http://cob3-6-pc1:11311'
 alias indigo='schroot -c indigo_trusty'
 
 # industrial_ci local tests
-alias run_ci='/home/mig/git/industrial_ci/industrial_ci/scripts/run_ci'
+
+alias run_ci_indigo='/home/mig/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=indigo UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu'
+alias run_ci_indigo_public="/home/mig/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=indigo UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu BEFORE_SCRIPT='catkin config -w $CATKIN_WORKSPACE -a -DPUBLICBUILD=1'"
+alias run_ci_kinetic='/home/mig/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=kinetic UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu'
+alias run_ci_kinetic_public="/home/mig/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=kinetic UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu BEFORE_SCRIPT='catkin config -w $CATKIN_WORKSPACE -a -DPUBLICBUILD=1'"
 
 # start qt creator with specific envs without messing up ROS
 alias qtc='source /opt/qt57/bin/qt57-env.sh && qtcreator'
