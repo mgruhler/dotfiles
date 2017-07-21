@@ -16,7 +16,6 @@ alias bsr="source ~/.bashrc"
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-
 # Robot connection
 alias raw31='ssh -X mig@raw3-1-pc1'
 alias raw33='ssh -X mig@raw3-3-pc1'
@@ -29,11 +28,8 @@ alias expraw33='export ROS_MASTER_URI=http://raw3-3-pc1:11311'
 alias expcob33='export ROS_MASTER_URI=http://cob3-3-pc1:11311'
 alias expcob36='export ROS_MASTER_URI=http://cob3-6-pc1:11311'
 
-# schroot aliases
-alias indigo='schroot -c indigo_trusty'
 
 # industrial_ci local tests
-
 alias run_ci_indigo='/home/mig/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=indigo UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu'
 alias run_ci_indigo_public="/home/mig/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=indigo UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu BEFORE_SCRIPT='catkin config -w $CATKIN_WORKSPACE -a -DPUBLICBUILD=1'"
 alias run_ci_kinetic='/home/mig/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=kinetic UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu'
