@@ -35,5 +35,8 @@ alias run_ci_indigo_public="/home/mig/git/industrial_ci/industrial_ci/scripts/ru
 alias run_ci_kinetic='/home/mig/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=kinetic UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu'
 alias run_ci_kinetic_public="/home/mig/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=kinetic UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu BEFORE_SCRIPT='catkin config -w $CATKIN_WORKSPACE -a -DPUBLICBUILD=1'"
 
+# handy ROS aliases
+alias catkin_build_compile_commands='catkin build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=1'
+
 # start qt creator with specific envs without messing up ROS
 alias qtc='source /opt/qt57/bin/qt57-env.sh && qtcreator'

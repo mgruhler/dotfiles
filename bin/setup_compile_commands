@@ -1,0 +1,56 @@
+#!/bin/bash
+
+###
+### Script for sourcing a ros environment 
+###
+
+# get starting directory
+CWD=$(pwd)
+DIR=$CWD
+NOTFOUND=true
+
+echo " "
+
+# search recursively through folders until we run into the homedirectory
+while test $CWD != $HOME && $NOTFOUND ; do
+  if [ -d "$CWD/.catkin_tools" ] ;
+  then
+    echo "In workspace: $CWD"
+    NOTFOUND=false
+    # check if build directory exists
+    if [ -d "$CWD/build" ];
+    then
+      JSONS=`find build -name compile_commands.json`
+      # check if temp file exists and clean
+      if [ -f "$CWD/compile_commands.json" ];
+      then
+        rm $CWD/compile_commands.json
+        touch $CWD/compile_commands.json
+      fi
+      # push contents of all compile_commands.json files into unified one
+      for JSON in $JSONS; do
+        cat $JSON >> $CWD/compile_commands.json
+      done
+      # some postprocessing: remove "][" flags
+      sed -i '/\]\[/d' $CWD/compile_commands.json
+      echo "Finished setting up $CWD/compile_commands.json"  
+    else
+      echo "No build directory present, aborting"
+    fi
+  else  
+    pushd .. > /dev/null
+    CWD=$(pwd)
+  fi
+done
+
+# if we didn't find a catkin workspace
+if $NOTFOUND;
+then
+  echo "Not in catkin workspace"
+fi
+
+echo " "
+
+# get back old working directory and clear directory stack
+pushd $DIR > /dev/null
+dirs -c > /dev/null
