@@ -15,6 +15,7 @@
 # $ git branch-status
 # master (ahead 2) | (behind 0) origin/master
 
+
 OPTIONS='hamvb:s:lru:'
 usage="$(basename "$0") ["$OPTIONS"] -- Summarise status of branch(es)
 
@@ -38,6 +39,18 @@ For example
     $(basename "$0") -s 8.34/8.36    # Show all 8.34 branches which are
                                       # ahead of or behind their 8.38 remote.
 "
+
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+RESET='\033[0m'
+
+color_conditional() {
+  if [ $1 -gt 0 ]; then
+    echo -e $2$1$RESET
+  else
+    echo -e $1
+  fi
+}
 
 while getopts $OPTIONS option; do
   case "$option" in
@@ -90,15 +103,15 @@ do
     RIGHT_AHEAD=$(echo "$DELTAS" | grep -c '^>')
     if [ -z $aheadonly ] && [ -z $behindonly ] ; then
         if [ $LEFT_AHEAD -gt 0 ] || [ $RIGHT_AHEAD -gt 0 ] || [ $verbose ] ; then
-            echo "$local (ahead $LEFT_AHEAD) | (behind $RIGHT_AHEAD) $remote"
+            echo "$local (ahead $(color_conditional $LEFT_AHEAD $GREEN)) | (behind $(color_conditional $RIGHT_AHEAD $RED)) $remote"
         fi
     elif [ $aheadonly ] ; then
         if [ $LEFT_AHEAD -gt 0 ] || [ $verbose ] ; then
-            echo "$local (ahead $LEFT_AHEAD) | $remote"
+            echo "$local (ahead $(color_conditional $LEFT_AHEAD $GREEN)) | $remote"
         fi
     elif [ $behindonly ] ; then
         if [ $RIGHT_AHEAD -gt 0 ] || [ $verbose ] ; then
-            echo "$local | (behind $RIGHT_AHEAD) $remote"
+            echo "$local | (behind $(color_conditional $RIGHT_AHEAD $RED)) $remote"
         fi
     else
          printf "Specifying both -l and -r makes no sense" >&2
