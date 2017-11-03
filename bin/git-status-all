@@ -9,17 +9,18 @@ function echo_usage() {
   echo "Usage: git-status-all [options]"
   echo ""
   echo "Shows the status of all repositories in the current folder."
-  echo "Calls \"git status -sb\" internally on all directories in the current folder."
+  echo "Calls \"git-branch-status -v\" internally on all directories in the current folder."
   echo ""
   echo "optional arguments:"
-  echo "-h, --help           Show this help message and exit"
+  echo "-h, --help            Show this help message and exit"
+  echo "-a, --all             Show information for all available branches"
   echo "--outputfile=<FILE>   File to pipe output in. "
   echo ""
 }
 
 ### Main
 # read in arguments
-optspec=":h-:"
+optspec=":ah-:"
 
 OUTPUT=""
 
@@ -27,6 +28,9 @@ while getopts "$optspec" optchar; do
   case "${optchar}" in
     -)
       case "${OPTARG}" in
+        all)
+          ALL=true
+          ;;
         help)
           echo_usage
           exit 2
@@ -41,6 +45,9 @@ while getopts "$optspec" optchar; do
           exit 1
           ;;
       esac;;
+    a)
+      ALL=true
+      ;;
     h)
       echo_usage
       exit 2
@@ -68,7 +75,12 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
     REPO=${REPO%/.git}
   fi
   echo "__ git status for repository: $REPO __" | tee -a $TMP
-  git status -sb | tee -a $TMP
+  if [ "$ALL" ]
+    then
+      git-branch-status -av | tee -a $TMP
+    else
+      git-branch-status -v | tee -a $TMP
+  fi
   echo "" | tee -a $TMP
 
 else
@@ -85,7 +97,12 @@ else
       pushd $PWD/$line > /dev/null
 
       echo "__ git status for repository: $line __" | tee -a $TMP
-      git status -sb | tee -a $TMP
+      if [ "$ALL" ]
+        then
+          git-branch-status -av | tee -a $TMP
+        else
+          git-branch-status -v | tee -a $TMP
+      fi
       echo "" | tee -a $TMP
 
       popd > /dev/null
