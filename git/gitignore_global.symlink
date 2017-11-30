@@ -15,4 +15,5 @@ msg_gen/
 #ignore executables
 *.pyc
 
-
+#ignore changes to the .gitconfig to avoid accidentilly checking in default names/emails
+gitconfig.symlink
