@@ -1,6 +1,3 @@
-[user]
-	name = ipa-mig
-	email = Matthias.Gruhler@ipa.fraunhofer.de
 [core]
 	editor = vim
 	excludesfile = ~/.gitignore_global
