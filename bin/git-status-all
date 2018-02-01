@@ -9,7 +9,7 @@ function echo_usage() {
   echo "Usage: git-status-all [options]"
   echo ""
   echo "Shows the status of all repositories in the current folder."
-  echo "Calls \"git-branch-status -v\" internally on all directories in the current folder."
+  echo "Calls \"git-branch-status -v\" and \"git status -s\" internally on all directories in the current folder."
   echo ""
   echo "optional arguments:"
   echo "-h, --help            Show this help message and exit"
@@ -100,8 +100,10 @@ else
       if [ "$ALL" ]
         then
           git-branch-status -av | tee -a $TMP
+          git status -s | tee -a $TMP
         else
           git-branch-status -v | tee -a $TMP
+          git status -s | tee -a $TMP
       fi
       echo "" | tee -a $TMP
 
