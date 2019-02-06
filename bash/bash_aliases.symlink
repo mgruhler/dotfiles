@@ -17,8 +17,8 @@ alias bsr="source ~/.bashrc"
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # industrial_ci local tests
-alias run_ci_indigo='/home/$USER/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=indigo ROS_REPO=ros UPSTREAM_WORKSPACE=file ROSINSTALL_FILENAME=.ci.rosinstall'
-alias run_ci_kinetic='/home/$USER/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=kinetic ROS_REPO=ros UPSTREAM_WORKSPACE=file ROSINSTALL_FILENAME=.ci.rosinstall'
+alias run_ci_indigo='/home/$USER/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=indigo ROS_REPO=ros UPSTREAM_WORKSPACE=file ROSINSTALL_FILENAME=.ci.rosinstall NOT_TEST_INSTALL=true'
+alias run_ci_kinetic='/home/$USER/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=kinetic ROS_REPO=ros UPSTREAM_WORKSPACE=file ROSINSTALL_FILENAME=.ci.rosinstall NOT_TEST_INSTALL=true'
 
 # handy ROS aliases
 alias catkin_build_compile_commands='catkin build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=1'
