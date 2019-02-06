@@ -24,6 +24,3 @@ alias run_ci_kinetic_public="/home/$USER/git/industrial_ci/industrial_ci/scripts
 
 # handy ROS aliases
 alias catkin_build_compile_commands='catkin build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=1'
-
-# start qt creator with specific envs without messing up ROS
-alias qtc='source /opt/qt57/bin/qt57-env.sh && qtcreator'
