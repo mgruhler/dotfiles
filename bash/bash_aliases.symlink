@@ -18,9 +18,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 # industrial_ci local tests
 alias run_ci_indigo='/home/$USER/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=indigo UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu'
-alias run_ci_indigo_public="/home/$USER/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=indigo UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu BEFORE_SCRIPT='catkin config -w $CATKIN_WORKSPACE -a -DPUBLICBUILD=1'"
 alias run_ci_kinetic='/home/$USER/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=kinetic UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu'
-alias run_ci_kinetic_public="/home/$USER/git/industrial_ci/industrial_ci/scripts/run_ci ROS_DISTRO=kinetic UPSTREAM_WORKSPACE=file ROS_REPOSITORY_PATH=http://packages.ros.org/ros/ubuntu BEFORE_SCRIPT='catkin config -w $CATKIN_WORKSPACE -a -DPUBLICBUILD=1'"
 
 # handy ROS aliases
 alias catkin_build_compile_commands='catkin build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=1'
