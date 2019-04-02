@@ -42,7 +42,11 @@ function parse_git_dirty {
 }
 
 function parse_git_branch {
-git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(parse_git_dirty)$(need_push))/"
+  if $(git rev-parse --is-bare-repository 2> /dev/null); then
+    echo " ${SOLAR_RED}|BARE|${RESET}"
+  else
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(parse_git_dirty)$(need_push))/"
+  fi
 }
 
 if [[ -z "${debian_chroot}" ]]; then
