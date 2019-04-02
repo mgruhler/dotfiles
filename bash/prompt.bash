@@ -50,7 +50,7 @@ function parse_git_branch {
 }
 
 if [[ -z "${debian_chroot}" ]]; then
-  export PS1='\[${SOLAR_ORANGE}\]\u\[${SOLAR_WHITE}\]@\[${SOLAR_YELLOW}\]\h \[${BOLD}${SOLAR_GREEN}\]\w\[${RESET}${SOLAR_BLUE}\]$(parse_git_branch)\[${RESET}\]$ '
+  export PS1='\[${SOLAR_ORANGE}\]\u\[${SOLAR_WHITE}\]@\[${SOLAR_YELLOW}\]\h \[${BOLD}${SOLAR_GREEN}\]\w\[${RESET}${SOLAR_BLUE}\]$(parse_git_branch)\[${RESET}\]$\n'
 else
-  export PS1='\[${BOLD}${SOLAR_GREEN}\]${debian_chroot:+($debian_chroot)\[${SOLAR_BLUE}\]|}\[${RESET}${SOLAR_MAGENTA}\]\u\[${SOLAR_WHITE}\]@\[${SOLAR_VIOLET}\]\h \[${BOLD}${SOLAR_GREEN}\]\w\[${RESET}${SOLAR_BLUE}\]$(parse_git_branch)\[${RESET}\]$ '
+  export PS1='\[${BOLD}${SOLAR_GREEN}\]${debian_chroot:+($debian_chroot)\[${SOLAR_BLUE}\]|}\[${RESET}${SOLAR_MAGENTA}\]\u\[${SOLAR_WHITE}\]@\[${SOLAR_VIOLET}\]\h \[${BOLD}${SOLAR_GREEN}\]\w\[${RESET}${SOLAR_BLUE}\]$(parse_git_branch)\[${RESET}\]$\n'
 fi
